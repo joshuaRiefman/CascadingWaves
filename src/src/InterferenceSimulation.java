@@ -2,7 +2,7 @@ package src;
 
 public class InterferenceSimulation {
     static int size = 1000;
-    static int sourceCount = 3;
+    static int sourceCount = 5;
     static int simulationLengthInSeconds = 20;
 
     public static void main(String[] args) throws InterruptedException {
@@ -15,7 +15,7 @@ public class InterferenceSimulation {
             Thread.sleep(1000/240);
 
             physics.UpdatePhysics();
-            pixels = Graphics.CalculatePixels(physics);
+            pixels = Graphics.CalculatePixels(physics, true);
 
             graphics.Render(pixels);
         }

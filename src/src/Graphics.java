@@ -33,28 +33,27 @@ public class Graphics extends JFrame {
         this.repaint();
     }
 
-    public static Pixel[][] CalculatePixels(Physics physics) {
-        double pi  = Math.toRadians(180);
+    public static Pixel[][] CalculatePixels(Physics physics, Boolean normalize) {
         int width = physics.size;
         int height = physics.size;
         Pixel[][] pixels = new Pixel[width][height];
 
-        double k = 2*pi / physics.wavelength;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                double pathLengthDifference = Physics.GetPathLengthDifference(physics.pathLengths[i][j]);
-                double strength = k*pathLengthDifference;
+                double rawValue = physics.GetIntensityAtPoint(i, j);
+                int value = SquareNormalized(rawValue);
 
-                int value = (int)abs(( (strength / ( 2.0 * pi ) ) * Physics.strengthFactor));
-                value = (int) (pow((value/255f),2) * 255);
-
-                int blue = max(value, 0);
-                int green = max(value - (2 * 255), 0);
-                int red = max(value - (4 * 255), 0);
+                int blue = normalize ? max(value, 0) : value;
+                int green = normalize ? max(value - (2 * 255), 0) : 0;
+                int red = normalize ? max(value - (4 * 255), 0) : 0;
 
                 pixels[i][j] = new Pixel(red, green, blue);
             }
         }
         return pixels;
+    }
+
+    public static int SquareNormalized(double rawValue) {
+        return (int)(pow((rawValue/255f),2) * 255);
     }
 }

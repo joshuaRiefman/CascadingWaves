@@ -9,6 +9,7 @@ public class Source {
     public float v_y;
     int[][] points;
     float position;
+//    float strength;
 
     public Source(int x, int y, int v_x, int v_y) {
         this.x = x;
@@ -25,6 +26,7 @@ public class Source {
             this.points[i] = new int[]{random.nextInt(size), random.nextInt(size)};
         }
         this.points[3] = this.points[0];
+//        this.strength = random.nextFloat(1.5f) - 0.5f;
 
         this.x = this.points[0][0];
         this.y = this.points[0][1];
