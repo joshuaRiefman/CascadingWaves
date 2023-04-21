@@ -1,23 +1,23 @@
-package src;
+package main.java;
 
 import static java.lang.Math.*;
 
-public class Physics {
-    static float strengthFactor = 4f;
-    static float speedMultiplier = 5;
-    int size;
-    Source[] sources;
-    float wavelength = 15;
-    float[][][] pathLengths;
-    public static double pi = Math.toRadians(180);
+public class PhysicsEngine {
+    private static final float STRENGTH_COEFFICIENT = 4f;
+    private static final float SPEED_COEFFICIENT = 5;
+    private static final float WAVELENGTH = 15;
+    private static final double PI = Math.toRadians(180);
+    private Source[] sources;
+    private float[][][] pathLengths;
+    public int worldSize;
     public double waveNumber;
 
-    public Physics(int size, Source[] sources) {
-        this.size = size;
+    public PhysicsEngine(int worldSize, Source[] sources) {
+        this.worldSize = worldSize;
         this.sources = sources;
-        this.pathLengths= new float[size][size][this.sources.length];
+        this.pathLengths= new float[worldSize][worldSize][this.sources.length];
 
-        this.waveNumber = 2*pi / wavelength;
+        this.waveNumber = 2* PI / WAVELENGTH;
     }
 
     void UpdatePhysics() {
@@ -26,22 +26,22 @@ public class Physics {
 //        }
 
         for (Source source : this.sources) {
-            source.x += speedMultiplier * (source.v_x / 5);
-            source.y += speedMultiplier * (source.v_y / 5);
+            source.x += SPEED_COEFFICIENT * (source.v_x / 5);
+            source.y += SPEED_COEFFICIENT * (source.v_y / 5);
 
-            if (source.x > this.size || source.x < 0) {
+            if (source.x > this.worldSize || source.x < 0) {
                 source.v_x *= -1;
 
             }
 
-            if (source.y > this.size || source.y < 0) {
+            if (source.y > this.worldSize || source.y < 0) {
                 source.v_y *= -1;
             }
         }
 
 
-        for (int i = 0; i < this.size; i++) {
-            for (int j = 0; j < this.size; j++) {
+        for (int i = 0; i < this.worldSize; i++) {
+            for (int j = 0; j < this.worldSize; j++) {
                 for (int k = 0; k < this.sources.length; k++) {
                     this.pathLengths[i][j][k] = GetPathLength(i, j, this.sources[k]);
                 }
@@ -70,9 +70,9 @@ public class Physics {
     }
 
     double GetIntensityAtPoint(int x, int y) {
-        double pathLengthDifference = Physics.GetPathLengthDifference(this.pathLengths[x][y]);
+        double pathLengthDifference = PhysicsEngine.GetPathLengthDifference(this.pathLengths[x][y]);
         double strength = this.waveNumber*pathLengthDifference;
-        return abs( ( strength / (2.0 * pi) ) * Physics.strengthFactor );
+        return abs( ( strength / (2.0 * PI) ) * PhysicsEngine.STRENGTH_COEFFICIENT);
 //        double pathLengthSquaredSum = Physics.GetPathLengthSquaredSum(this.pathLengths[x][y]);
 //        return pathLengthSquaredSum * Physics.strengthFactor;
     }
