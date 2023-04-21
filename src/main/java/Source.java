@@ -1,4 +1,4 @@
-package src;
+package main.java;
 
 import java.util.Random;
 
@@ -7,29 +7,14 @@ public class Source {
     public int y;
     public float v_x;
     public float v_y;
-    int[][] points;
-    float position;
-//    float strength;
+    public int[][] points;
+    public float position;
 
     public Source(int x, int y, int v_x, int v_y) {
         this.x = x;
         this.y = y;
         this.v_x = v_x;
         this.v_y = v_y;
-    }
-
-    public Source(int size) {
-        Random random = new Random();
-
-        this.points = new int[4][2];
-        for (int i = 0; i < 3; i++) {
-            this.points[i] = new int[]{random.nextInt(size), random.nextInt(size)};
-        }
-        this.points[3] = this.points[0];
-//        this.strength = random.nextFloat(1.5f) - 0.5f;
-
-        this.x = this.points[0][0];
-        this.y = this.points[0][1];
     }
 
     public static Source[] CreateSources(int numSources, int size) {
@@ -43,14 +28,19 @@ public class Source {
         return sources;
     }
 
-    public static Source[] CreateSourcesBezier(int numSources, int size) {
-        Source[] sources = new Source[numSources];
+    // Bezier Movement (currently unstable and not in use)
 
-        for (int i = 0; i < numSources; i++) {
-            sources[i] = new Source(2*size);
+    public Source(int size) {
+        Random random = new Random();
+
+        this.points = new int[4][2];
+        for (int i = 0; i < 3; i++) {
+            this.points[i] = new int[]{random.nextInt(size), random.nextInt(size)};
         }
+        this.points[3] = this.points[0];
 
-        return sources;
+        this.x = this.points[0][0];
+        this.y = this.points[0][1];
     }
 
     public void ProgressMovement(float v) {
@@ -64,6 +54,16 @@ public class Source {
 
         this.x = position[0];
         this.y = position[1];
+    }
+
+    public static Source[] CreateSourcesBezier(int numSources, int size) {
+        Source[] sources = new Source[numSources];
+
+        for (int i = 0; i < numSources; i++) {
+            sources[i] = new Source(2*size);
+        }
+
+        return sources;
     }
 
     static int[] BezierPosition(int[] x1, int[] x2, int[] x3, int[] x4, float t) {
