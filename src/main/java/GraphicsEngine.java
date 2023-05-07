@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 import static java.lang.Math.*;
 
 public class GraphicsEngine extends JFrame {
-    private int windowSize;
-    private BufferedImage image;
+    private final int windowSize;
+    private final BufferedImage image;
 
     public GraphicsEngine(int windowSize) {
         this.windowSize = windowSize;
