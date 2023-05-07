@@ -3,14 +3,14 @@ package main.java;
 import static java.lang.Math.*;
 
 public class PhysicsEngine {
-    private static final float STRENGTH_COEFFICIENT = 4f;
-    private static final float SPEED_COEFFICIENT = 5;
-    private static final float WAVELENGTH = 15;
-    private static final double PI = Math.toRadians(180);
+    private static final float STRENGTH_COEFFICIENT = 7f;
+    private static final float SPEED_COEFFICIENT = 1f;
+    private static final float WAVELENGTH = 20f;
+    private static final float PI = (float)Math.toRadians(180);
     private Source[] sources;
     private float[][][] pathLengths;
     public int worldSize;
-    public double waveNumber;
+    public float waveNumber;
 
     public PhysicsEngine(int worldSize, Source[] sources) {
         this.worldSize = worldSize;
@@ -21,10 +21,6 @@ public class PhysicsEngine {
     }
 
     void UpdatePhysics() {
-//        for (Source source : this.sources) {
-//            source.ProgressMovement(speedMultiplier / 100f);
-//        }
-
         for (Source source : this.sources) {
             source.x += SPEED_COEFFICIENT * (source.v_x / 5);
             source.y += SPEED_COEFFICIENT * (source.v_y / 5);
@@ -52,29 +48,18 @@ public class PhysicsEngine {
     static float GetPathLength(int x, int y, Source source) {
         return (float) sqrt(pow(source.x - x, 2) + pow(source.y - y, 2));
     }
-
-    static float GetPathLengthDifference(float[] pathLengths) {
-        float difference = pathLengths[0];
-        for (int i = 1; i < pathLengths.length; i++) {
-            difference -= pathLengths[i];
+    float GetSourcePowerSum(int x, int y, Source[] sources) {
+        float power = 0;
+        for (Source source: sources) {
+            float distance = GetPathLength(x, y, source);
+            power += sin(this.waveNumber * distance);
         }
-        return difference;
+        return power;
     }
 
-    static float GetPathLengthSquaredSum(float[] pathLengths) {
-        float sum = pathLengths[0];
-        for (int i = 1; i < pathLengths.length; i++) {
-            sum += 255f * exp(-1f/160000f * pow(pathLengths[i], 2) );
-        }
-        return sum;
-    }
-
-    double GetIntensityAtPoint(int x, int y) {
-        double pathLengthDifference = PhysicsEngine.GetPathLengthDifference(this.pathLengths[x][y]);
-        double strength = this.waveNumber*pathLengthDifference;
-        return abs( ( strength / (2.0 * PI) ) * PhysicsEngine.STRENGTH_COEFFICIENT);
-//        double pathLengthSquaredSum = Physics.GetPathLengthSquaredSum(this.pathLengths[x][y]);
-//        return pathLengthSquaredSum * Physics.strengthFactor;
+    float GetIntensityAtPoint(int x, int y) {
+        float sourcePowerSum = STRENGTH_COEFFICIENT * GetSourcePowerSum(x, y, sources);
+        return (float)pow(sourcePowerSum, 2);
     }
 }
 

@@ -22,10 +22,10 @@ public class FragmentShader {
             for (int j = 0; j < height; j++) {
                 double rawValue = this.physicsEngine.GetIntensityAtPoint(i, j);
                 int value = SquareNormalized(rawValue);
-
+                value = (int) rawValue;
                 int blue = this.normalize ? max(value, 0) : value;
                 int green = this.normalize ? max(value - (2 * 255), 0) : 0;
-                int red = this.normalize ? max(value - (4 * 255), 0) : 0;
+                int red = this.normalize ? max(value - (3 * 255), 0) : 0;
 
                 pixels[i][j] = new Pixel(red, green, blue);
             }
